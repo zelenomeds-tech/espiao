@@ -1,0 +1,1563 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Clientes Zeleno</title>
+
+  <style>
+    :root {
+      --green: #00543d;
+      --green-2: #0b6a4d;
+      --green-soft: #eef7f3;
+      --bg: #f7fbf9;
+      --white: #ffffff;
+      --text: #0f172a;
+      --soft: #64748b;
+      --border: #d9e6df;
+      --danger: #b91c1c;
+      --shadow: 0 18px 45px rgba(0, 84, 61, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #00543d, #003828);
+      z-index: 20;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 430px;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.22);
+    }
+
+    .kicker {
+      display: inline-block;
+      background: var(--green-soft);
+      color: var(--green);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      color: var(--green);
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--soft);
+      line-height: 1.6;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      min-height: 50px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      outline: none;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(0,84,61,0.08);
+    }
+
+    button {
+      border: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 900;
+      cursor: pointer;
+      background: var(--green);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    button.secondary {
+      background: var(--green-soft);
+      color: var(--green);
+      border: 1px solid rgba(0,84,61,0.12);
+    }
+
+    button.danger {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .erro {
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 700;
+      min-height: 20px;
+      margin-top: 10px;
+    }
+
+    .app {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topbar-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand h2 {
+      color: var(--green);
+      font-size: 26px;
+      letter-spacing: -0.05em;
+    }
+
+    .brand span {
+      color: var(--soft);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .main {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 26px 24px 60px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-label {
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      color: var(--green);
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .table-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .table-head {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .table-head h3 {
+      color: var(--green);
+      font-size: 24px;
+      letter-spacing: -0.04em;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    th {
+      color: var(--green);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: #f8fcfa;
+    }
+
+    .muted {
+      color: var(--soft);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .cliente-nome {
+      color: var(--green);
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
+    .empty {
+      padding: 34px;
+      text-align: center;
+      color: var(--soft);
+      font-weight: 700;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.45);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 30;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 620px;
+      background: #fff;
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.22);
+    }
+
+    .modal h3 {
+      color: var(--green);
+      font-size: 28px;
+      letter-spacing: -0.05em;
+      margin-bottom: 8px;
+    }
+
+    .modal-info {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0;
+      padding: 16px;
+      border-radius: 18px;
+      background: #f8fcfa;
+      border: 1px solid var(--border);
+    }
+
+    .modal-info-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--soft);
+    }
+
+    .modal-info-row strong {
+      color: var(--green);
+      text-align: right;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modal-actions button {
+      flex: 1;
+    }
+
+
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .dash-value {
+      color: var(--green);
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+
+    .dash-small {
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .etapas-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .etapa-pill {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: #f8fcfa;
+      border: 1px solid var(--border);
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .etapa-pill strong {
+      color: var(--green);
+    }
+
+    @media (max-width: 860px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+      }
+    }
+  
+/* INICIO CHAT PAINEL ZELENO - ADICIONADO SEM ALTERAR O RESTANTE
+.chat-panel-grid {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 16px;
+}
+
+.chat-list {
+  display: grid;
+  gap: 8px;
+  max-height: 560px;
+  overflow-y: auto;
+  align-content: start;
+}
+
+.chat-list-item {
+  width: 100%;
+  min-height: 0;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  border-radius: 16px;
+  padding: 12px 13px !important;
+  text-align: left;
+  cursor: pointer;
+  display: block;
+}
+
+.chat-list-item > div {
+  margin: 0 0 4px;
+}
+
+.chat-list-item > div:last-child {
+  margin-bottom: 0;
+}
+
+.chat-list-item.active {
+  border-color: var(--green);
+  box-shadow: 0 0 0 4px rgba(0,84,61,0.08);
+}
+
+.chat-list-title {
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.chat-list-meta,
+.chat-message-meta {
+  color: var(--soft);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.chat-conversation {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: #f8fcfa;
+  overflow: hidden;
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-conversation-head {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  background: #ffffff;
+}
+
+.chat-conversation-head h4 {
+  color: var(--green);
+  font-size: 22px;
+  letter-spacing: -0.04em;
+  margin-bottom: 4px;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.chat-message {
+  max-width: 82%;
+  padding: 11px 13px;
+  border-radius: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.chat-message.cliente {
+  justify-self: start;
+  background: #ffffff;
+  border: 1px solid var(--border);
+}
+
+.chat-message.vendedor,
+.chat-message.sistema {
+  justify-self: end;
+  background: var(--green);
+  color: #ffffff;
+}
+
+.chat-message.vendedor .chat-message-meta,
+.chat-message.sistema .chat-message-meta {
+  color: rgba(255,255,255,0.78);
+}
+
+.chat-reply-form {
+  padding: 14px;
+  border-top: 1px solid var(--border);
+  background: #ffffff;
+  display: flex;
+  gap: 10px;
+}
+
+.chat-reply-form input {
+  flex: 1;
+}
+
+.chat-reply-form button {
+  min-width: 110px;
+}
+
+@media (max-width: 860px) {
+  .chat-panel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-conversation {
+    min-height: 420px;
+  }
+}
+FIM CHAT PAINEL ZELENO */
+
+</style>
+</head>
+
+<body>
+
+  <section id="loginScreen" class="login-screen">
+    <div class="login-box">
+      <div class="kicker">Painel do vendedor</div>
+      <h1>Clientes Zeleno</h1>
+      <p>Digite seu e-mail e senha para visualizar apenas os seus clientes cadastrados na loja.</p>
+
+      <div class="form-grid">
+        <input type="email" id="adminEmailInput" placeholder="E-mail">
+        <input type="password" id="adminSecretInput" placeholder="Senha">
+        <button type="button" onclick="entrarAdmin()">Entrar no painel</button>
+        <div id="loginErro" class="erro"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="app" class="app">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <h2>Painel de Clientes</h2>
+          <span id="vendedorInfo">Visualize seus clientes e acesse a loja como cliente</span>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="secondary" onclick="carregarCadastros()">Atualizar</button>
+          <button type="button" class="danger" onclick="sairAdmin()">Sair</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="stats">
+        <div class="card">
+          <div class="stat-label">Total de cadastros</div>
+          <div class="stat-value" id="statTotal">0</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">Cadastros ativos</div>
+          <div class="stat-value" id="statAtivos">0</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">Último cadastro</div>
+          <div class="stat-value" id="statUltimo">-</div>
+        </div>
+      </section>
+
+      <!-- INICIO DASHBOARD DA LOJA - COMENTADO PARA NAO APARECER
+      <section class="table-card">
+        <div class="table-head">
+          <div>
+            <h3>Dashboard da Loja</h3>
+            <div class="muted">Métricas dos deals do pipeline Loja vinculados aos seus clientes.</div>
+          </div>
+          <span class="pill" id="dashboardStatus">Aguardando</span>
+        </div>
+        <div class="card" style="box-shadow:none;border:0;border-radius:0;">
+          <div class="dashboard-grid">
+            <div>
+              <div class="stat-label">Clientes que compraram</div>
+              <div class="dash-value" id="dashClientesCompraram">0</div>
+              <div class="dash-small" id="dashClientesSemCompra">0 sem compra</div>
+            </div>
+            <div>
+              <div class="stat-label">Faturamento total</div>
+              <div class="dash-value" id="dashFaturamento">R$ 0,00</div>
+              <div class="dash-small" id="dashTicketMedio">Ticket médio R$ 0,00</div>
+            </div>
+            <div>
+              <div class="stat-label">Compras realizadas</div>
+              <div class="dash-value" id="dashCompras">0</div>
+              <div class="dash-small" id="dashDeals">0 negócios no pipeline</div>
+            </div>
+            <div>
+              <div class="stat-label">Carrinhos abandonados</div>
+              <div class="dash-value" id="dashCarrinhos">0</div>
+              <div class="dash-small" id="dashPendentes">0 pagamentos pendentes</div>
+            </div>
+          </div>
+          <div class="etapas-grid" id="dashEtapas"></div>
+        </div>
+      </section>
+      FIM DASHBOARD DA LOJA -->
+
+
+      <!-- INICIO CHAT PAINEL ZELENO - ADICIONADO SEM ALTERAR O RESTANTE
+      <section class="table-card" id="chatsVendedorSection">
+        <div class="table-head">
+          <div>
+            <h3>Chat dos Clientes</h3>
+            <div class="muted">Conversas vinculadas ao seu proprietário, com histórico salvo na aba Chats.</div>
+          </div>
+          <div class="actions">
+            <button type="button" class="secondary" onclick="carregarChatsVendedorPainelLoja()">Atualizar chats</button>
+            <span class="pill" id="chatStatusLista">Aguardando</span>
+          </div>
+        </div>
+
+        <div class="card" style="box-shadow:none;border:0;border-radius:0;">
+          <div class="chat-panel-grid">
+            <div class="chat-list" id="chatListVendedor">
+              <div class="empty">Os clientes aparecerão aqui.</div>
+            </div>
+
+            <div class="chat-conversation">
+              <div class="chat-conversation-head">
+                <div>
+                  <h4 id="chatConversaTitulo">Selecione uma conversa</h4>
+                  <div class="muted" id="chatConversaMeta">As mensagens aparecerão aqui.</div>
+                </div>
+                <button type="button" class="danger" id="chatDeleteButton" onclick="excluirChatVendedorPainel()" style="display:none;padding:10px 12px;border-radius:12px;font-size:12px;">Excluir conversa</button>
+              </div>
+
+              <div class="chat-messages" id="chatMensagensVendedor">
+                <div class="empty">Nenhuma conversa selecionada.</div>
+              </div>
+
+              <form class="chat-reply-form" id="chatReplyForm">
+                <input type="text" id="chatReplyInput" placeholder="Responder cliente..." autocomplete="off">
+                <button type="submit">Responder</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      FIM CHAT PAINEL ZELENO -->
+
+      <section class="toolbar">
+        <input type="text" id="buscaInput" placeholder="Buscar por nome, email, CPF, cidade ou celular" oninput="filtrarCadastros()">
+        <button type="button" onclick="carregarCadastros()">Buscar todos</button>
+      </section>
+
+      <section class="table-card">
+        <div class="table-head">
+          <div>
+            <h3>Cadastros</h3>
+            <div class="muted">A senha nunca aparece na lista. Ela só é usada internamente para acessar a loja.</div>
+          </div>
+          <span class="pill" id="statusLista">Aguardando</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Contato</th>
+                <th>CPF</th>
+                <th>Localização</th>
+                <th>Status</th>
+                <th>Loja</th>
+                <th>Data</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="cadastrosTbody">
+              <tr>
+                <td colspan="8" class="empty">Faça login para carregar seus cadastros.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </section>
+
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal">
+      <div class="kicker">Acesso como cliente</div>
+      <h3 id="modalClienteNome">Cliente</h3>
+      <p>Você vai acessar a loja exatamente com o login deste cliente. A senha não será exibida.</p>
+
+      <div class="modal-info">
+        <div class="modal-info-row">
+          <span>Email</span>
+          <strong id="modalClienteEmail">-</strong>
+        </div>
+        <div class="modal-info-row">
+          <span>CPF</span>
+          <strong id="modalClienteCpf">-</strong>
+        </div>
+        <div class="modal-info-row">
+          <span>Celular</span>
+          <strong id="modalClienteCelular">-</strong>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" onclick="confirmarEntrarComoCliente()">Acessar loja deste cliente</button>
+        <button type="button" class="secondary" onclick="fecharModal()">Cancelar</button>
+      </div>
+
+      <div id="modalErro" class="erro"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzvSd2pproSrqI1LoYzCbHwyhgMg_9wTFnsl--hTcXUqwS9y98Ymr4wmpzzEYpwfRB-GQ/exec';
+    const LOJA_URL = 'https://loja-zeleno-front.vercel.app';
+
+    const ADMIN_SECRET_KEY = 'zeleno_admin_secret';
+    const VENDEDOR_EMAIL_KEY = 'zeleno_vendedor_email';
+    const VENDEDOR_PROPRIETARIO_KEY = 'zeleno_vendedor_proprietario';
+    const CLIENTE_IMPERSONADO_KEY = 'zeleno_cliente_impersonado';
+
+    const NOMES_PRODUTOS_POR_SKU = {
+      /*
+        Preencha aqui somente se o Apps Script retornar apenas os SKUs em skus_liberados.
+        Exemplo:
+        'SKU-EXEMPLO': 'Nome correto do produto',
+        '7890000000000': 'Óleo Full Spectrum 3000mg'
+      */
+    };
+
+    let adminSecret = '';
+    let vendedorEmail = '';
+    let vendedorProprietario = '';
+    let cadastros = [];
+    let cadastrosFiltrados = [];
+    let clienteSelecionado = null;
+    let dashboardCadastros = [];
+
+    
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const savedEmail = localStorage.getItem(VENDEDOR_EMAIL_KEY);
+      const savedSecret = localStorage.getItem(ADMIN_SECRET_KEY);
+      const savedProprietario = localStorage.getItem(VENDEDOR_PROPRIETARIO_KEY);
+
+      if (savedEmail && savedSecret) {
+        vendedorEmail = savedEmail;
+        adminSecret = savedSecret;
+        vendedorProprietario = savedProprietario || '';
+        document.getElementById('adminEmailInput').value = savedEmail;
+        document.getElementById('adminSecretInput').value = savedSecret;
+        mostrarApp();
+        carregarCadastros();
+      }
+    });
+
+  function apiPost(payload) {
+  return new Promise(function(resolve, reject) {
+    const callbackName = 'jsonpCallback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+
+    window[callbackName] = function(response) {
+      delete window[callbackName];
+      script.remove();
+      resolve(response);
+    };
+
+    const script = document.createElement('script');
+
+    script.onerror = function() {
+      delete window[callbackName];
+      script.remove();
+      reject(new Error('Erro ao conectar com o Apps Script.'));
+    };
+
+    const url = API_URL
+      + '?callback=' + encodeURIComponent(callbackName)
+      + '&payload=' + encodeURIComponent(JSON.stringify(payload));
+
+    script.src = url;
+    document.body.appendChild(script);
+  });
+}
+
+    async function entrarAdmin() {
+      const emailInput = document.getElementById('adminEmailInput');
+      const senhaInput = document.getElementById('adminSecretInput');
+      const erro = document.getElementById('loginErro');
+      const email = String(emailInput.value || '').trim().toLowerCase();
+      const senha = String(senhaInput.value || '').trim();
+
+      erro.textContent = '';
+
+      if (!email || !senha) {
+        erro.textContent = 'Digite e-mail e senha.';
+        return;
+      }
+
+      try {
+        const res = await apiPost({
+          action: 'validateLoginPainelLoja',
+          email: email,
+          senha: senha
+        });
+
+        if (!res || !res.success) {
+          erro.textContent = res && res.message ? res.message : 'E-mail ou senha inválidos.';
+          return;
+        }
+
+        vendedorEmail = email;
+        adminSecret = senha;
+        vendedorProprietario = res.proprietario || '';
+
+        localStorage.setItem(VENDEDOR_EMAIL_KEY, vendedorEmail);
+        localStorage.setItem(ADMIN_SECRET_KEY, adminSecret);
+        localStorage.setItem(VENDEDOR_PROPRIETARIO_KEY, vendedorProprietario);
+
+        mostrarApp();
+        carregarCadastros();
+
+      } catch (err) {
+        erro.textContent = err && err.message ? err.message : String(err);
+      }
+    }
+
+    function mostrarApp() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+
+      if (vendedorProprietario) {
+        document.getElementById('vendedorInfo').textContent = 'Clientes do proprietário: ' + vendedorProprietario;
+      }
+    }
+
+    function sairAdmin() {
+      localStorage.removeItem(ADMIN_SECRET_KEY);
+      localStorage.removeItem(VENDEDOR_EMAIL_KEY);
+      localStorage.removeItem(VENDEDOR_PROPRIETARIO_KEY);
+      localStorage.removeItem(CLIENTE_IMPERSONADO_KEY);
+      adminSecret = '';
+      vendedorEmail = '';
+      vendedorProprietario = '';
+      cadastros = [];
+      cadastrosFiltrados = [];
+      location.reload();
+    }
+
+    async function carregarCadastros() {
+      setStatus('Carregando...');
+      renderLoading();
+
+      try {
+        const res = await apiPost({
+          action: 'getCadastrosVendedorPainelLoja',
+          email: vendedorEmail,
+          senha: adminSecret
+        });
+
+        if (!res || !res.success) {
+          setStatus('Erro');
+          renderErro(res && res.message ? res.message : 'Não foi possível carregar os cadastros.');
+          return;
+        }
+
+        cadastros = Array.isArray(res.cadastros) ? res.cadastros : [];
+        cadastrosFiltrados = cadastros.slice();
+
+        atualizarStats();
+        renderCadastros(cadastrosFiltrados);
+        setStatus(cadastros.length + ' cadastros');
+        // INICIO DASHBOARD DA LOJA - COMENTADO PARA NAO CARREGAR
+        // carregarDashboard();
+        // FIM DASHBOARD DA LOJA
+
+      } catch (err) {
+        setStatus('Erro');
+        renderErro(err && err.message ? err.message : String(err));
+      }
+    }
+
+
+    /* INICIO DASHBOARD DA LOJA - COMENTADO PARA NAO CARREGAR
+    async function carregarDashboard() {
+      document.getElementById('dashboardStatus').textContent = 'Carregando...';
+
+      try {
+        const res = await apiPost({
+          action: 'getDashboardVendedorPainelLoja',
+          email: vendedorEmail,
+          senha: adminSecret
+        });
+
+        if (!res || !res.success) {
+          document.getElementById('dashboardStatus').textContent = 'Erro';
+          return;
+        }
+
+        renderDashboard(res);
+        dashboardCadastros = Array.isArray(res.cadastros) ? res.cadastros : [];
+        mesclarMetricasCadastros();
+        filtrarCadastros();
+        document.getElementById('dashboardStatus').textContent = 'Atualizado';
+
+      } catch (err) {
+        document.getElementById('dashboardStatus').textContent = 'Erro';
+      }
+    }
+
+    function renderDashboard(data) {
+      const resumo = data.resumo || {};
+      const etapas = data.etapas || {};
+
+      document.getElementById('dashClientesCompraram').textContent = resumo.clientes_com_compra || 0;
+      document.getElementById('dashClientesSemCompra').textContent = (resumo.clientes_sem_compra || 0) + ' sem compra';
+      document.getElementById('dashFaturamento').textContent = formatarMoeda(resumo.faturamento_total || 0);
+      document.getElementById('dashTicketMedio').textContent = 'Ticket médio ' + formatarMoeda(resumo.ticket_medio || 0);
+      document.getElementById('dashCompras').textContent = resumo.total_compras || 0;
+      document.getElementById('dashDeals').textContent = (resumo.total_deals || 0) + ' negócios no pipeline';
+      document.getElementById('dashCarrinhos').textContent = resumo.carrinhos_abandonados || 0;
+      document.getElementById('dashPendentes').textContent = (resumo.pagamentos_pendentes || 0) + ' pagamentos pendentes';
+
+      const etapaHtml = Object.keys(etapas).map(function(nome) {
+        return '<span class="etapa-pill">' + escapeHtml(nome) + ' <strong>' + Number(etapas[nome] || 0) + '</strong></span>';
+      }).join('');
+
+      document.getElementById('dashEtapas').innerHTML = etapaHtml || '<span class="etapa-pill">Nenhum negócio encontrado</span>';
+    }
+
+    function mesclarMetricasCadastros() {
+      if (!dashboardCadastros.length) return;
+
+      const porRow = {};
+      dashboardCadastros.forEach(function(item) {
+        porRow[Number(item.row)] = item.metricas_loja || {};
+      });
+
+      cadastros = cadastros.map(function(item) {
+        item.metricas_loja = porRow[Number(item.row)] || item.metricas_loja || {};
+        return item;
+      });
+    }
+    FIM DASHBOARD DA LOJA */
+
+    function filtrarCadastros() {
+      const termo = normalize(document.getElementById('buscaInput').value);
+
+      if (!termo) {
+        cadastrosFiltrados = cadastros.slice();
+      } else {
+        cadastrosFiltrados = cadastros.filter(function (item) {
+          const texto = [
+            item.nome,
+            item.email,
+            item.cpf,
+            item.celular,
+            item.cidade,
+            item.uf,
+            item.status
+          ].join(' ');
+
+          return normalize(texto).includes(termo);
+        });
+      }
+
+      renderCadastros(cadastrosFiltrados);
+      setStatus(cadastrosFiltrados.length + ' encontrados');
+    }
+
+    function renderLoading() {
+      document.getElementById('cadastrosTbody').innerHTML =
+        '<tr><td colspan="8" class="empty">Carregando cadastros...</td></tr>';
+    }
+
+    function renderErro(message) {
+      document.getElementById('cadastrosTbody').innerHTML =
+        '<tr><td colspan="8" class="empty">' + escapeHtml(message) + '</td></tr>';
+    }
+
+    function renderCadastros(lista) {
+      const tbody = document.getElementById('cadastrosTbody');
+
+      if (!lista.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty">Nenhum cadastro encontrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = lista.map(function (item) {
+        return `
+          <tr>
+            <td>
+              <div class="cliente-nome">${escapeHtml(item.nome || 'Sem nome')}</div>
+              <div class="muted">${escapeHtml(item.origem || 'Loja Zeleno')}</div>
+            </td>
+
+            <td>
+              <div>${escapeHtml(item.email || '-')}</div>
+              <div class="muted">${formatarCelular(item.celular)}</div>
+            </td>
+
+            <td>${formatarCpf(item.cpf)}</td>
+
+            <td>
+              <div>${escapeHtml(item.cidade || '-')}</div>
+              <div class="muted">${escapeHtml(item.uf || '')}</div>
+            </td>
+
+            <td>
+              <span class="pill">${escapeHtml(item.status || 'ativo')}</span>
+            </td>
+
+            <td>
+              <div>${Number((item.metricas_loja || {}).compras || 0)} compra(s)</div>
+              <div class="muted">${formatarMoeda((item.metricas_loja || {}).total_gasto || 0)}</div>
+              <div class="muted">${Number((item.metricas_loja || {}).carrinhos_abandonados || 0)} carrinho(s)</div>
+            </td>
+
+            <td>
+              <div>${formatarData(item.data_cadastro)}</div>
+            </td>
+
+            <td>
+              <div class="actions">
+                <button type="button" onclick="abrirModalCliente(${Number(item.row)})">Acessar loja</button>
+                <button type="button" class="secondary" onclick="verDetalhes(${Number(item.row)})">Ver dados</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function abrirModalCliente(row) {
+      clienteSelecionado = cadastros.find(function (item) {
+        return Number(item.row) === Number(row);
+      });
+
+      if (!clienteSelecionado) return;
+
+      document.getElementById('modalClienteNome').textContent = clienteSelecionado.nome || 'Cliente';
+      document.getElementById('modalClienteEmail').textContent = clienteSelecionado.email || '-';
+      document.getElementById('modalClienteCpf').textContent = formatarCpf(clienteSelecionado.cpf);
+      document.getElementById('modalClienteCelular').textContent = formatarCelular(clienteSelecionado.celular);
+      document.getElementById('modalErro').textContent = '';
+      document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    function fecharModal() {
+      document.getElementById('modalOverlay').style.display = 'none';
+      clienteSelecionado = null;
+    }
+
+    async function confirmarEntrarComoCliente() {
+      if (!clienteSelecionado) return;
+
+      document.getElementById('modalErro').textContent = '';
+
+      try {
+        const res = await apiPost({
+          action: 'loginComoCadastroVendedorPainelLoja',
+          email: vendedorEmail,
+          senha: adminSecret,
+          row: clienteSelecionado.row
+        });
+
+        if (!res || !res.success) {
+          document.getElementById('modalErro').textContent =
+            res && res.message ? res.message : 'Não foi possível acessar este cliente.';
+          return;
+        }
+
+        const clienteLogin = {
+          email: res.email,
+          senha: res.senha,
+          nome: clienteSelecionado.nome || '',
+          row: clienteSelecionado.row,
+          acessoAdmin: true,
+          dataAcesso: new Date().toISOString()
+        };
+
+        localStorage.setItem(CLIENTE_IMPERSONADO_KEY, JSON.stringify(clienteLogin));
+        localStorage.setItem('cliente_login', JSON.stringify({
+          email: res.email,
+          senha: res.senha
+        }));
+
+        const url = LOJA_URL
+          + '?adminClienteEmail=' + encodeURIComponent(res.email)
+          + '&adminClienteSenha=' + encodeURIComponent(res.senha)
+          + '&adminImpersonar=1';
+
+        window.open(url, '_blank');
+        fecharModal();
+
+      } catch (err) {
+        document.getElementById('modalErro').textContent =
+          err && err.message ? err.message : String(err);
+      }
+    }
+
+    function verDetalhes(row) {
+      const item = cadastros.find(function (c) {
+        return Number(c.row) === Number(row);
+      });
+
+      if (!item) return;
+
+      const texto =
+        'Nome: ' + (item.nome || '-') + '\n' +
+        'Email: ' + (item.email || '-') + '\n' +
+        'CPF: ' + formatarCpf(item.cpf) + '\n' +
+        'Celular: ' + formatarCelular(item.celular) + '\n' +
+        'CEP: ' + (item.cep || '-') + '\n' +
+        'Endereço: ' + [
+          item.logradouro,
+          item.numero,
+          item.complemento,
+          item.bairro,
+          item.cidade,
+          item.uf
+        ].filter(Boolean).join(', ') + '\n' +
+        'Status: ' + (item.status || 'ativo') + '\n' +
+        'Produtos liberados: ' + getProdutosLiberadosTexto(item) + '\n' +
+        'Compras: ' + Number((item.metricas_loja || {}).compras || 0) + '\n' +
+        'Total gasto: ' + formatarMoeda((item.metricas_loja || {}).total_gasto || 0) + '\n' +
+        'Carrinhos abandonados: ' + Number((item.metricas_loja || {}).carrinhos_abandonados || 0);
+
+      alert(texto);
+    }
+
+
+    function parseListaValores(v) {
+      if (Array.isArray(v)) return v;
+
+      return String(v || '')
+        .split(/[,;\n|]+/)
+        .map(function(valor) {
+          return String(valor || '').trim();
+        })
+        .filter(Boolean);
+    }
+
+    function getProdutosLiberados(item) {
+      const nomesJaResolvidos = parseListaValores(
+        item.produtos_liberados ||
+        item.produtosLiberados ||
+        item.nomes_produtos_liberados ||
+        item.nomesProdutosLiberados ||
+        item.skus_liberados_nomes ||
+        item.skusLiberadosNomes
+      );
+
+      if (nomesJaResolvidos.length) return nomesJaResolvidos;
+
+      return parseListaValores(item.skus_liberados || item.skusLiberados).map(function(sku) {
+        return NOMES_PRODUTOS_POR_SKU[sku] || sku;
+      });
+    }
+
+    function getProdutosLiberadosTexto(item) {
+      const produtos = getProdutosLiberados(item);
+      return produtos.length ? produtos.join(', ') : '-';
+    }
+
+    function atualizarStats() {
+      document.getElementById('statTotal').textContent = cadastros.length;
+
+      const ativos = cadastros.filter(function (item) {
+        return normalize(item.status || 'ativo') === 'ativo';
+      }).length;
+
+      document.getElementById('statAtivos').textContent = ativos;
+
+      if (cadastros.length) {
+        document.getElementById('statUltimo').textContent = formatarData(cadastros[cadastros.length - 1].data_cadastro);
+      } else {
+        document.getElementById('statUltimo').textContent = '-';
+      }
+    }
+
+    function setStatus(text) {
+      document.getElementById('statusLista').textContent = text;
+    }
+
+    function normalize(v) {
+      return String(v || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function onlyDigits(v) {
+      return String(v || '').replace(/\D/g, '');
+    }
+
+    function formatarCpf(v) {
+      const d = onlyDigits(v);
+
+      if (d.length !== 11) return escapeHtml(v || '-');
+
+      return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+
+    function formatarCelular(v) {
+      const d = onlyDigits(v);
+
+      if (!d) return '-';
+
+      if (d.length === 11) {
+        return d.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+      }
+
+      if (d.length === 10) {
+        return d.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+      }
+
+      return escapeHtml(v);
+    }
+
+    function formatarMoeda(v) {
+      const n = Number(v || 0);
+
+      return n.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });
+    }
+
+    function formatarData(v) {
+      if (!v) return '-';
+
+      try {
+        const date = new Date(v);
+
+        if (isNaN(date.getTime())) {
+          return String(v);
+        }
+
+        return date.toLocaleDateString('pt-BR');
+      } catch (e) {
+        return String(v);
+      }
+    }
+  
+/* INICIO CHAT PAINEL ZELENO - ADICIONADO SEM ALTERAR O RESTANTE
+let chatsVendedorPainel = [];
+let chatSelecionadoPainel = null;
+let chatPollingPainel = null;
+
+function setChatStatusPainel(texto) {
+  const el = document.getElementById('chatStatusLista');
+  if (el) el.textContent = texto;
+}
+
+async function carregarChatsVendedorPainelLoja() {
+  if (!vendedorEmail || !adminSecret) return;
+
+  setChatStatusPainel('Carregando...');
+
+  try {
+    const res = await apiPost({
+      action: 'getChatsVendedorPainelLoja',
+      email: vendedorEmail,
+      senha: adminSecret
+    });
+
+    if (!res || !res.success) {
+      setChatStatusPainel('Erro');
+      renderChatsVendedorPainel([]);
+      return;
+    }
+
+    chatsVendedorPainel = Array.isArray(res.chats) ? res.chats : [];
+    renderChatsVendedorPainel(chatsVendedorPainel);
+    setChatStatusPainel(chatsVendedorPainel.length + ' conversa(s)');
+
+    if (chatSelecionadoPainel) {
+      const atualizado = chatsVendedorPainel.find(function(item) {
+        return String(item.chatId) === String(chatSelecionadoPainel.chatId);
+      });
+
+      if (atualizado) {
+        selecionarChatVendedorPainel(atualizado.chatId, true);
+      }
+    }
+
+  } catch (err) {
+    setChatStatusPainel('Erro');
+  }
+}
+
+function renderChatsVendedorPainel(lista) {
+  const container = document.getElementById('chatListVendedor');
+  if (!container) return;
+
+  if (!lista.length) {
+    container.innerHTML = '<div class="empty">Nenhuma conversa encontrada.</div>';
+    return;
+  }
+
+  container.innerHTML = lista.map(function(chat) {
+    const ativo = chatSelecionadoPainel && String(chatSelecionadoPainel.chatId) === String(chat.chatId) ? ' active' : '';
+    const ultima = chat.ultimaMensagem || {};
+    return `
+      <button type="button" class="chat-list-item${ativo}" onclick="selecionarChatVendedorPainel('${escapeAttr(chat.chatId)}')">
+        <div class="chat-list-title">${escapeHtml(chat.clienteNome || chat.clienteEmail || 'Cliente sem nome')}</div>
+        <div class="chat-list-meta">${escapeHtml(chat.clienteEmail || '-')}</div>
+        <div class="chat-list-meta">${escapeHtml(ultima.mensagem || 'Sem mensagens')}</div>
+        <div class="chat-list-meta">${formatarDataHoraChatPainel(ultima.data || chat.atualizadoEm)}</div>
+      </button>
+    `;
+  }).join('');
+}
+
+function selecionarChatVendedorPainel(chatId, manterScroll) {
+  const chat = chatsVendedorPainel.find(function(item) {
+    return String(item.chatId) === String(chatId);
+  });
+
+  if (!chat) return;
+
+  chatSelecionadoPainel = chat;
+  renderChatsVendedorPainel(chatsVendedorPainel);
+  renderConversaVendedorPainel(chat, manterScroll);
+}
+
+function renderConversaVendedorPainel(chat, manterScroll) {
+  const titulo = document.getElementById('chatConversaTitulo');
+  const meta = document.getElementById('chatConversaMeta');
+  const mensagens = document.getElementById('chatMensagensVendedor');
+
+  if (!mensagens) return;
+
+  const deleteBtn = document.getElementById('chatDeleteButton');
+  if (deleteBtn) deleteBtn.style.display = 'inline-flex';
+
+  if (titulo) titulo.textContent = chat.clienteNome || chat.clienteEmail || 'Cliente';
+  if (meta) {
+    meta.textContent = [
+      chat.clienteEmail || '',
+      chat.clienteCelular || '',
+      'Vendedor: ' + (chat.vendedorProprietario || vendedorProprietario || '-')
+    ].filter(Boolean).join(' • ');
+  }
+
+  const lista = Array.isArray(chat.mensagens) ? chat.mensagens : [];
+
+  if (!lista.length) {
+    mensagens.innerHTML = '<div class="empty">Nenhuma mensagem nesta conversa.</div>';
+    return;
+  }
+
+  mensagens.innerHTML = lista.map(function(msg) {
+    const remetente = String(msg.remetente || 'cliente').toLowerCase();
+    const classe = remetente === 'cliente' ? 'cliente' : 'vendedor';
+    return `
+      <div class="chat-message ${classe}">
+        <div>${escapeHtml(msg.mensagem || '')}</div>
+        <div class="chat-message-meta">${escapeHtml(msg.remetente || '')} • ${formatarDataHoraChatPainel(msg.data)}</div>
+      </div>
+    `;
+  }).join('');
+
+  if (!manterScroll) {
+    mensagens.scrollTop = mensagens.scrollHeight;
+  }
+}
+
+async function excluirChatVendedorPainel() {
+  if (!chatSelecionadoPainel) return;
+
+  const nome = chatSelecionadoPainel.clienteNome || chatSelecionadoPainel.clienteEmail || 'este cliente';
+  if (!confirm('Excluir a conversa com ' + nome + '?')) return;
+
+  try {
+    const res = await apiPost({
+      action: 'chatDeleteConversation',
+      email: vendedorEmail,
+      senha: adminSecret,
+      chatId: chatSelecionadoPainel.chatId
+    });
+
+    if (!res || !res.success) {
+      alert((res && res.message) ? res.message : 'Não foi possível excluir a conversa.');
+      return;
+    }
+
+    chatSelecionadoPainel = null;
+    const titulo = document.getElementById('chatConversaTitulo');
+    const meta = document.getElementById('chatConversaMeta');
+    const mensagens = document.getElementById('chatMensagensVendedor');
+    const deleteBtn = document.getElementById('chatDeleteButton');
+
+    if (titulo) titulo.textContent = 'Selecione uma conversa';
+    if (meta) meta.textContent = 'As mensagens aparecerão aqui.';
+    if (mensagens) mensagens.innerHTML = '<div class="empty">Nenhuma conversa selecionada.</div>';
+    if (deleteBtn) deleteBtn.style.display = 'none';
+
+    await carregarChatsVendedorPainelLoja();
+  } catch (err) {
+    alert('Não foi possível excluir a conversa.');
+  }
+}
+
+async function responderChatVendedorPainel(texto) {
+  if (!chatSelecionadoPainel || !texto) return;
+
+  try {
+    const res = await apiPost({
+      action: 'chatSendMessage',
+      chatId: chatSelecionadoPainel.chatId,
+      vendedorProprietario: chatSelecionadoPainel.vendedorProprietario || vendedorProprietario || '',
+      vendedorEmail: vendedorEmail,
+      remetente: 'vendedor',
+      mensagem: texto
+    });
+
+    if (res && res.success) {
+      await carregarChatsVendedorPainelLoja();
+      selecionarChatVendedorPainel(chatSelecionadoPainel.chatId);
+    }
+  } catch (err) {
+    alert('Não foi possível enviar a resposta.');
+  }
+}
+
+function formatarDataHoraChatPainel(v) {
+  if (!v) return '-';
+
+  try {
+    const date = new Date(v);
+    if (isNaN(date.getTime())) return String(v);
+    return date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  } catch (e) {
+    return String(v);
+  }
+}
+
+function escapeAttr(value) {
+  return String(value || '')
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const chatReplyForm = document.getElementById('chatReplyForm');
+  const chatReplyInput = document.getElementById('chatReplyInput');
+
+  if (chatReplyForm && chatReplyInput) {
+    chatReplyForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const texto = String(chatReplyInput.value || '').trim();
+      if (!texto) return;
+
+      chatReplyInput.value = '';
+      responderChatVendedorPainel(texto);
+    });
+  }
+
+  setTimeout(function() {
+    if (vendedorEmail && adminSecret) {
+      carregarChatsVendedorPainelLoja();
+    }
+  }, 1200);
+
+  if (!chatPollingPainel) {
+    chatPollingPainel = setInterval(function() {
+      if (vendedorEmail && adminSecret) {
+        carregarChatsVendedorPainelLoja();
+      }
+    }, 15000);
+  }
+});
+FIM CHAT PAINEL ZELENO */
+
+</script>
+</body>
+</html>
