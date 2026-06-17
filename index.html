@@ -1163,12 +1163,16 @@
           senha: res.senha
         }));
 
+        // _ts (nonce) deixa a URL unica a cada acesso: impede o navegador de
+        // reabrir a loja do cache com o cliente anterior. Sempre carrega o
+        // cliente que voce clicou agora.
         const url = LOJA_URL
           + '?adminClienteEmail=' + encodeURIComponent(res.email)
           + '&adminClienteSenha=' + encodeURIComponent(res.senha)
-          + '&adminImpersonar=1';
+          + '&adminImpersonar=1'
+          + '&_ts=' + Date.now();
 
-        window.open(url, '_blank');
+        window.open(url, '_blank', 'noopener');
         fecharModal();
 
       } catch (err) {
