@@ -1,8 +1,3 @@
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -749,6 +744,54 @@ FIM CHAT PAINEL ZELENO */
           </table>
         </div>
       </section>
+
+      <!-- INICIO PEDIDOS DA LOJA (vendas e recompras + origem Loja) - 100% ADITIVO -->
+      <section class="table-card" id="pedidosLojaSection">
+        <div class="table-head">
+          <div>
+            <h3>Pedidos da loja</h3>
+            <div class="muted">Negocios do pipeline de vendas e recompras com origem Loja, dos seus clientes.</div>
+          </div>
+          <span class="pill" id="pedidosStatus">Aguardando</span>
+        </div>
+
+        <section class="stats" style="margin-top:14px;">
+          <div class="stat">
+            <div class="stat-label">Total de pedidos</div>
+            <div class="stat-value" id="pedidosTotal">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Faturamento</div>
+            <div class="stat-value" id="pedidosFaturamento">R$ 0,00</div>
+          </div>
+        </section>
+
+        <section class="toolbar" style="margin-top:14px;">
+          <input type="text" id="pedidosBuscaInput" placeholder="Buscar por cliente, email, pedido ou etapa" oninput="filtrarPedidosLoja()">
+          <button type="button" onclick="carregarPedidosLoja()">Atualizar pedidos</button>
+        </section>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Pedido</th>
+                <th>Valor</th>
+                <th>Etapa</th>
+                <th>Origem</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody id="pedidosTbody">
+              <tr>
+                <td colspan="6" class="empty">Clique em "Atualizar pedidos" para carregar.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <!-- FIM PEDIDOS DA LOJA -->
     </main>
   </section>
 
@@ -1557,6 +1600,100 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 FIM CHAT PAINEL ZELENO */
+
+  /* ============================================================
+     PEDIDOS DA LOJA (pipeline vendas e recompras + origem Loja)
+     dos clientes do vendedor logado. 100% ADITIVO.
+     ============================================================ */
+  var pedidosLoja = [];
+  var pedidosLojaFiltrados = [];
+
+  function setPedidosStatus(texto) {
+    var el = document.getElementById('pedidosStatus');
+    if (el) el.textContent = texto;
+  }
+
+  async function carregarPedidosLoja() {
+    if (!vendedorEmail || !adminSecret) return;
+
+    setPedidosStatus('Carregando...');
+    var tbody = document.getElementById('pedidosTbody');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty">Carregando pedidos...</td></tr>';
+
+    try {
+      var res = await apiPost({
+        action: 'getPedidosLojaVendedor',
+        email: vendedorEmail,
+        senha: adminSecret
+      });
+
+      if (!res || !res.success) {
+        setPedidosStatus('Erro');
+        if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty">' + escapeHtml((res && res.message) ? res.message : 'Nao foi possivel carregar os pedidos.') + '</td></tr>';
+        return;
+      }
+
+      pedidosLoja = Array.isArray(res.pedidos) ? res.pedidos : [];
+      pedidosLojaFiltrados = pedidosLoja.slice();
+
+      var elTotal = document.getElementById('pedidosTotal');
+      var elFat = document.getElementById('pedidosFaturamento');
+      if (elTotal) elTotal.textContent = (res.total != null ? res.total : pedidosLoja.length);
+      if (elFat) elFat.textContent = formatarMoeda(res.faturamento_total || 0);
+
+      renderPedidosLoja(pedidosLojaFiltrados);
+      setPedidosStatus(pedidosLoja.length + ' pedido(s)');
+
+    } catch (err) {
+      setPedidosStatus('Erro');
+      if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty">' + escapeHtml(err && err.message ? err.message : String(err)) + '</td></tr>';
+    }
+  }
+
+  function filtrarPedidosLoja() {
+    var inp = document.getElementById('pedidosBuscaInput');
+    var termo = normalize(inp ? inp.value : '');
+    if (!termo) {
+      pedidosLojaFiltrados = pedidosLoja.slice();
+    } else {
+      pedidosLojaFiltrados = pedidosLoja.filter(function (p) {
+        return normalize(p.cliente_nome).indexOf(termo) >= 0
+          || normalize(p.cliente_email).indexOf(termo) >= 0
+          || normalize(p.nome).indexOf(termo) >= 0
+          || normalize(p.etapa).indexOf(termo) >= 0;
+      });
+    }
+    renderPedidosLoja(pedidosLojaFiltrados);
+  }
+
+  function renderPedidosLoja(lista) {
+    var tbody = document.getElementById('pedidosTbody');
+    if (!tbody) return;
+
+    if (!lista || !lista.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhum pedido encontrado.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = lista.map(function (p) {
+      return '<tr>'
+        + '<td><strong>' + escapeHtml(p.cliente_nome || '-') + '</strong><br><span class="muted">' + escapeHtml(p.cliente_email || '') + '</span></td>'
+        + '<td>' + escapeHtml(p.nome || '-') + '</td>'
+        + '<td>' + formatarMoeda(p.valor || 0) + '</td>'
+        + '<td>' + escapeHtml(p.etapa || '-') + '</td>'
+        + '<td>' + escapeHtml(p.origem || '-') + '</td>'
+        + '<td>' + formatarData(p.data) + '</td>'
+        + '</tr>';
+    }).join('');
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
+      if (vendedorEmail && adminSecret) {
+        carregarPedidosLoja();
+      }
+    }, 1400);
+  });
 
 </script>
 </body>
