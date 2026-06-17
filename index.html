@@ -1652,13 +1652,22 @@ FIM CHAT PAINEL ZELENO */
     }).join('');
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(function () {
-      if (vendedorEmail && adminSecret) {
+  // Auto-carrega os pedidos assim que o vendedor estiver logado.
+  // Cobre tanto o login manual quanto a sessao ja salva. 100% ADITIVO.
+  (function () {
+    var jaPediu = false;
+    var tentativas = 0;
+    var timerAutoPedidos = setInterval(function () {
+      tentativas++;
+      if (!jaPediu && vendedorEmail && adminSecret && document.getElementById('pedidosTbody')) {
+        jaPediu = true;
+        clearInterval(timerAutoPedidos);
         carregarPedidosLoja();
+      } else if (tentativas > 120) {
+        clearInterval(timerAutoPedidos);
       }
-    }, 1400);
-  });
+    }, 500);
+  })();
 
 </script>
 </body>
