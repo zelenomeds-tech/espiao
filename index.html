@@ -6,541 +6,576 @@
   <title>Painel de Clientes Zeleno</title>
 
   <style>
-
-    @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
-
     :root {
-      --ink: #0c1f18;
       --green: #00543d;
-      --green-2: #1a7a3c;
-      --green-3: #0b6a4d;
-      --mint: #29e681;
-      --mint-soft: #d6f7e6;
-      --cream: #fdfaf2;
-      --bg: #f4f8f5;
-      --bg-2: #eef5f0;
-      --surface: #ffffff;
-      --soft: #5d6f66;
-      --soft-2: #8a988f;
-      --border: #e4ede8;
-      --border-2: #d4e2da;
-      --danger: #b3261e;
-      --danger-soft: #fdecea;
-      --warn: #b06d00;
-      --warn-soft: #fbf0d8;
-      --radius: 22px;
-      --radius-sm: 14px;
-      --shadow-sm: 0 4px 16px rgba(0, 84, 61, 0.06);
-      --shadow: 0 14px 38px rgba(0, 84, 61, 0.08);
-      --shadow-lg: 0 30px 70px rgba(2, 35, 25, 0.20);
-      --font-display: 'Sora', system-ui, -apple-system, sans-serif;
-      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --green-2: #0b6a4d;
+      --green-soft: #eef7f3;
+      --bg: #f7fbf9;
+      --white: #ffffff;
+      --text: #0f172a;
+      --soft: #64748b;
+      --border: #d9e6df;
+      --danger: #b91c1c;
+      --shadow: 0 18px 45px rgba(0, 84, 61, 0.08);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: Inter, Arial, sans-serif;
     }
-
-    html { scroll-behavior: smooth; }
 
     body {
-      font-family: var(--font-body);
-      color: var(--ink);
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      background:
-        radial-gradient(1100px 500px at 100% -10%, rgba(41, 230, 129, 0.07), transparent 60%),
-        radial-gradient(900px 500px at -10% 110%, rgba(0, 84, 61, 0.06), transparent 55%),
-        var(--bg);
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
     }
 
-    h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; color: var(--ink); }
-
-    /* ===================== LOGIN ===================== */
     .login-screen {
       position: fixed;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 20px;
+      background: linear-gradient(135deg, #00543d, #003828);
       z-index: 20;
-      background:
-        radial-gradient(800px 420px at 18% 12%, rgba(41, 230, 129, 0.20), transparent 55%),
-        radial-gradient(700px 500px at 88% 90%, rgba(26, 122, 60, 0.35), transparent 55%),
-        linear-gradient(150deg, #013a2a 0%, #00271c 100%);
     }
 
     .login-box {
       width: 100%;
-      max-width: 440px;
-      background: var(--surface);
-      border-radius: 30px;
-      padding: 40px 36px;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(14px) scale(0.985); }
-      to   { opacity: 1; transform: none; }
+      max-width: 430px;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.22);
     }
 
     .kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: var(--mint-soft);
+      display: inline-block;
+      background: var(--green-soft);
       color: var(--green);
-      padding: 7px 13px;
+      padding: 8px 12px;
       border-radius: 999px;
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 700;
-      margin-bottom: 18px;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 16px;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-    .kicker::before {
-      content: "";
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--green-2);
-      box-shadow: 0 0 0 3px rgba(41, 230, 129, 0.35);
+      letter-spacing: 0.08em;
     }
 
     h1 {
       color: var(--green);
-      font-size: 33px;
-      line-height: 1.05;
-      font-weight: 800;
-      margin-bottom: 10px;
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      margin-bottom: 12px;
     }
 
-    p { color: var(--soft); line-height: 1.6; font-size: 14px; margin-bottom: 22px; }
+    p {
+      color: var(--soft);
+      line-height: 1.6;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
 
-    /* ===================== FORM ELEMENTS ===================== */
     input {
       width: 100%;
-      min-height: 52px;
-      border: 1.5px solid var(--border-2);
-      border-radius: var(--radius-sm);
+      min-height: 50px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
       padding: 14px 16px;
       outline: none;
       font-size: 14px;
-      font-family: var(--font-body);
-      color: var(--ink);
       background: #fff;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
-    input::placeholder { color: var(--soft-2); }
+
     input:focus {
-      border-color: var(--green-2);
-      box-shadow: 0 0 0 4px rgba(26, 122, 60, 0.12);
-      background: #fcfefd;
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(0,84,61,0.08);
     }
-    .login-box input { margin-bottom: 14px; }
 
     button {
       border: none;
-      border-radius: var(--radius-sm);
-      padding: 14px 18px;
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: -0.01em;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 900;
       cursor: pointer;
       background: var(--green);
       color: #fff;
-      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+      font-size: 14px;
     }
-    button:hover { background: #00432f; transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0, 84, 61, 0.22); }
-    button:active { transform: translateY(0); box-shadow: none; }
-    .login-box button { width: 100%; min-height: 52px; margin-top: 4px; }
 
     button.secondary {
-      background: var(--bg-2);
+      background: var(--green-soft);
       color: var(--green);
-      border: 1px solid var(--border-2);
+      border: 1px solid rgba(0,84,61,0.12);
     }
-    button.secondary:hover { background: #e3efe8; box-shadow: var(--shadow-sm); }
 
-    button.danger { background: var(--danger-soft); color: var(--danger); }
-    button.danger:hover { background: #fbdedb; box-shadow: 0 8px 18px rgba(179, 38, 30, 0.14); }
+    button.danger {
+      background: #fee2e2;
+      color: var(--danger);
+    }
 
-    button:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
-    .erro { color: var(--danger); font-size: 13px; font-weight: 600; margin-top: 12px; min-height: 18px; }
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
 
-    /* ===================== APP SHELL ===================== */
-    .app { display: none; }
+    .erro {
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 700;
+      min-height: 20px;
+      margin-top: 10px;
+    }
+
+    .app {
+      display: none;
+      min-height: 100vh;
+    }
 
     .topbar {
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
       position: sticky;
       top: 0;
-      z-index: 12;
-      background: rgba(255, 255, 255, 0.78);
-      backdrop-filter: saturate(180%) blur(14px);
-      -webkit-backdrop-filter: saturate(180%) blur(14px);
-      border-bottom: 1px solid var(--border);
+      z-index: 10;
     }
+
     .topbar-inner {
-      max-width: 1240px;
+      max-width: 1360px;
       margin: 0 auto;
-      padding: 18px 28px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 16px;
       flex-wrap: wrap;
     }
-    .brand {
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 20px;
-      letter-spacing: -0.03em;
-      color: var(--green);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .brand::before {
-      content: "";
-      width: 11px; height: 11px;
-      border-radius: 50%;
-      background: var(--mint);
-      box-shadow: 0 0 0 4px rgba(41, 230, 129, 0.25);
-    }
-    #vendedorInfo { color: var(--soft); font-size: 13px; font-weight: 500; }
 
-    main {
-      max-width: 1240px;
+    .brand h2 {
+      color: var(--green);
+      font-size: 26px;
+      letter-spacing: -0.05em;
+    }
+
+    .brand span {
+      color: var(--soft);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .main {
+      max-width: 1360px;
       margin: 0 auto;
-      padding: 28px 28px 64px;
-      display: flex;
-      flex-direction: column;
+      padding: 26px 24px 60px;
+      display: grid;
       gap: 22px;
     }
 
-    /* ===================== STATS ===================== */
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 16px;
     }
-    .stat {
-      position: relative;
-      background: var(--surface);
+
+    .card {
+      background: #fff;
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px 22px 20px;
-      box-shadow: var(--shadow-sm);
-      overflow: hidden;
-      transition: transform 0.18s ease, box-shadow 0.2s ease;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow);
     }
-    .stat::before {
-      content: "";
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 4px;
-      background: linear-gradient(var(--green-2), var(--mint));
-      opacity: 0.9;
-    }
-    .stat:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
     .stat-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
       color: var(--soft);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       margin-bottom: 8px;
     }
+
     .stat-value {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 30px;
-      line-height: 1;
-      letter-spacing: -0.03em;
       color: var(--green);
-    }
-
-    /* ===================== CARDS / TABLES ===================== */
-    .card,
-    .table-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      padding: 24px;
-    }
-
-    .table-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-    .table-head h3 { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
-    .muted { color: var(--soft); font-size: 13px; line-height: 1.5; }
-
-    .pill {
-      align-self: center;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-2);
-      color: var(--green);
-      border: 1px solid var(--border-2);
-      padding: 7px 13px;
-      border-radius: 999px;
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .pill::before {
-      content: "";
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--mint);
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.06em;
     }
 
     .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .table-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .table-head {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
       display: flex;
+      justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
+      align-items: center;
     }
-    .toolbar input { flex: 1; min-width: 220px; }
-    .toolbar button { white-space: nowrap; }
+
+    .table-head h3 {
+      color: var(--green);
+      font-size: 24px;
+      letter-spacing: -0.04em;
+    }
 
     .table-wrap {
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: auto;
-      max-height: 560px;
+      overflow-x: auto;
     }
-    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-    thead th {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      background: var(--bg-2);
-      color: var(--green);
-      text-align: left;
-      font-family: var(--font-display);
-      font-weight: 600;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      padding: 14px 16px;
-      white-space: nowrap;
-      border-bottom: 1px solid var(--border-2);
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
     }
-    tbody td {
+
+    th, td {
       padding: 14px 16px;
       border-bottom: 1px solid var(--border);
-      color: var(--ink);
+      text-align: left;
+      font-size: 13px;
       vertical-align: middle;
     }
-    tbody tr { transition: background 0.14s ease; }
-    tbody tr:hover { background: #f3faf6; }
-    tbody tr:last-child td { border-bottom: none; }
-    td strong { font-weight: 600; }
-    .cliente-nome { font-weight: 600; color: var(--ink); }
-    .empty {
-      text-align: center;
-      color: var(--soft-2);
-      padding: 36px 16px;
+
+    th {
+      color: var(--green);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: #f8fcfa;
+    }
+
+    .muted {
+      color: var(--soft);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .cliente-nome {
+      color: var(--green);
+      font-weight: 900;
       font-size: 14px;
+      line-height: 1.4;
     }
 
-    /* ===================== DASHBOARD ===================== */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-    .dash-value {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 26px;
-      letter-spacing: -0.03em;
-      color: var(--green);
-      line-height: 1;
-    }
-    .dash-small { color: var(--soft); font-size: 12.5px; margin-top: 6px; }
-
-    .etapas-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-    .etapa-pill {
+    .pill {
       display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg-2);
-      border: 1px solid var(--border-2);
-      color: var(--green);
-      padding: 8px 14px;
+      padding: 7px 10px;
       border-radius: 999px;
-      font-size: 12.5px;
-      font-weight: 500;
-    }
-    .etapa-pill strong { font-family: var(--font-display); color: var(--ink); }
-
-    /* ===================== FORM GRID ===================== */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
     }
 
-    /* ===================== MODAL ===================== */
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
+    .empty {
+      padding: 34px;
+      text-align: center;
+      color: var(--soft);
+      font-weight: 700;
+    }
+
     .modal-overlay {
       position: fixed;
       inset: 0;
+      background: rgba(15,23,42,0.45);
+      backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 24px;
-      z-index: 40;
-      background: rgba(2, 31, 22, 0.55);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      padding: 20px;
+      z-index: 30;
     }
-    .modal-overlay.show { display: flex; }
+
     .modal {
       width: 100%;
-      max-width: 480px;
-      background: var(--surface);
-      border-radius: 26px;
-      padding: 32px;
-      box-shadow: var(--shadow-lg);
-      animation: rise 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+      max-width: 620px;
+      background: #fff;
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.22);
     }
-    .modal h3 { font-size: 22px; font-weight: 700; margin: 12px 0 6px; }
+
+    .modal h3 {
+      color: var(--green);
+      font-size: 28px;
+      letter-spacing: -0.05em;
+      margin-bottom: 8px;
+    }
+
     .modal-info {
-      background: var(--bg);
+      display: grid;
+      gap: 10px;
+      margin: 18px 0;
+      padding: 16px;
+      border-radius: 18px;
+      background: #f8fcfa;
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 6px 16px;
-      margin: 18px 0 22px;
     }
+
     .modal-info-row {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .modal-info-row:last-child { border-bottom: none; }
-    .modal-info-row span { color: var(--soft); font-size: 13px; }
-    .modal-info-row strong { font-weight: 600; font-size: 14px; }
-    .modal-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-    .modal-actions button { flex: 1; min-width: 150px; }
-
-    /* ===================== CHAT ===================== */
-    .chat-panel-grid {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 18px;
-    }
-    .chat-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 480px;
-      overflow: auto;
-      padding-right: 4px;
-    }
-    .chat-list-item {
-      width: 100%;
-      text-align: left;
-      background: var(--surface);
-      color: var(--ink);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      cursor: pointer;
-      transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
-    }
-    .chat-list-item:hover { border-color: var(--border-2); box-shadow: var(--shadow-sm); transform: none; }
-    .chat-list-item.active { border-color: var(--green-2); box-shadow: 0 0 0 3px rgba(26, 122, 60, 0.12); }
-    .chat-list-title { font-family: var(--font-display); font-weight: 600; font-size: 14px; margin-bottom: 4px; }
-    .chat-list-meta { color: var(--soft); font-size: 12px; line-height: 1.4; }
-
-    .chat-conversation {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      display: flex;
-      flex-direction: column;
-      min-height: 420px;
-      overflow: hidden;
-    }
-    .chat-conversation-head {
-      display: flex;
-      align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg);
+      font-size: 13px;
+      color: var(--soft);
     }
-    .chat-messages {
-      flex: 1;
-      overflow: auto;
-      padding: 18px;
+
+    .modal-info-row strong {
+      color: var(--green);
+      text-align: right;
+    }
+
+    .modal-actions {
       display: flex;
-      flex-direction: column;
       gap: 10px;
-      background:
-        radial-gradient(600px 300px at 100% 0%, rgba(41, 230, 129, 0.05), transparent 60%),
-        var(--surface);
+      flex-wrap: wrap;
     }
-    .chat-message {
-      max-width: 78%;
-      padding: 11px 14px;
-      border-radius: 16px;
-      font-size: 13.5px;
-      line-height: 1.45;
-    }
-    .chat-message.cliente {
-      align-self: flex-start;
-      background: var(--bg-2);
-      color: var(--ink);
-      border-bottom-left-radius: 5px;
-    }
-    .chat-message.vendedor {
-      align-self: flex-end;
-      background: var(--green);
-      color: #fff;
-      border-bottom-right-radius: 5px;
-    }
-    .chat-message-meta { margin-top: 6px; font-size: 11px; opacity: 0.7; }
-    .chat-reply-form { display: flex; gap: 10px; padding: 14px 16px; border-top: 1px solid var(--border); background: var(--surface); }
-    .chat-reply-form input { flex: 1; }
 
-    /* ===================== RESPONSIVE ===================== */
+    .modal-actions button {
+      flex: 1;
+    }
+
+
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .dash-value {
+      color: var(--green);
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+
+    .dash-small {
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .etapas-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .etapa-pill {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: #f8fcfa;
+      border: 1px solid var(--border);
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .etapa-pill strong {
+      color: var(--green);
+    }
+
     @media (max-width: 860px) {
-      .topbar-inner { padding: 16px 18px; }
-      main { padding: 20px 16px 48px; }
-      .card, .table-card { padding: 18px; }
-      .chat-panel-grid { grid-template-columns: 1fr; }
-      h1 { font-size: 28px; }
-    }
+      .stats {
+        grid-template-columns: 1fr;
+      }
 
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-    }
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
 
-    :focus-visible { outline: 3px solid rgba(26, 122, 60, 0.4); outline-offset: 2px; }
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+      }
+    }
   
-  </style>
+/* INICIO CHAT PAINEL ZELENO - ADICIONADO SEM ALTERAR O RESTANTE
+.chat-panel-grid {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 16px;
+}
+
+.chat-list {
+  display: grid;
+  gap: 8px;
+  max-height: 560px;
+  overflow-y: auto;
+  align-content: start;
+}
+
+.chat-list-item {
+  width: 100%;
+  min-height: 0;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  border-radius: 16px;
+  padding: 12px 13px !important;
+  text-align: left;
+  cursor: pointer;
+  display: block;
+}
+
+.chat-list-item > div {
+  margin: 0 0 4px;
+}
+
+.chat-list-item > div:last-child {
+  margin-bottom: 0;
+}
+
+.chat-list-item.active {
+  border-color: var(--green);
+  box-shadow: 0 0 0 4px rgba(0,84,61,0.08);
+}
+
+.chat-list-title {
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.chat-list-meta,
+.chat-message-meta {
+  color: var(--soft);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.chat-conversation {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: #f8fcfa;
+  overflow: hidden;
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-conversation-head {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  background: #ffffff;
+}
+
+.chat-conversation-head h4 {
+  color: var(--green);
+  font-size: 22px;
+  letter-spacing: -0.04em;
+  margin-bottom: 4px;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.chat-message {
+  max-width: 82%;
+  padding: 11px 13px;
+  border-radius: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.chat-message.cliente {
+  justify-self: start;
+  background: #ffffff;
+  border: 1px solid var(--border);
+}
+
+.chat-message.vendedor,
+.chat-message.sistema {
+  justify-self: end;
+  background: var(--green);
+  color: #ffffff;
+}
+
+.chat-message.vendedor .chat-message-meta,
+.chat-message.sistema .chat-message-meta {
+  color: rgba(255,255,255,0.78);
+}
+
+.chat-reply-form {
+  padding: 14px;
+  border-top: 1px solid var(--border);
+  background: #ffffff;
+  display: flex;
+  gap: 10px;
+}
+
+.chat-reply-form input {
+  flex: 1;
+}
+
+.chat-reply-form button {
+  min-width: 110px;
+}
+
+@media (max-width: 860px) {
+  .chat-panel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-conversation {
+    min-height: 420px;
+  }
+}
+FIM CHAT PAINEL ZELENO */
+
+</style>
 </head>
 
 <body>
@@ -708,33 +743,20 @@
             </tbody>
           </table>
         </div>
+
+      <!-- INICIO PEDIDOS COM ITENS (ADITIVO) -->
+      <section class="toolbar">
+        <button type="button" onclick="carregarPedidosComItens()">Carregar pedidos com itens</button>
       </section>
 
-      <!-- INICIO PEDIDOS DA LOJA (vendas e recompras + origem Loja) - 100% ADITIVO -->
-      <section class="table-card" id="pedidosLojaSection">
+      <section class="table-card">
         <div class="table-head">
           <div>
             <h3>Pedidos da loja</h3>
-            <div class="muted">Negocios do pipeline de vendas e recompras com origem Loja, dos seus clientes.</div>
+            <div class="muted">Pedidos dos seus clientes com os itens (produtos) de cada pedido.</div>
           </div>
-          <span class="pill" id="pedidosStatus">Aguardando</span>
+          <span class="pill" id="statusPedidosItens">Aguardando</span>
         </div>
-
-        <section class="stats" style="margin-top:14px;">
-          <div class="stat">
-            <div class="stat-label">Total de pedidos</div>
-            <div class="stat-value" id="pedidosTotal">0</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Faturamento</div>
-            <div class="stat-value" id="pedidosFaturamento">R$ 0,00</div>
-          </div>
-        </section>
-
-        <section class="toolbar" style="margin-top:14px;">
-          <input type="text" id="pedidosBuscaInput" placeholder="Buscar por cliente, email, pedido ou etapa" oninput="filtrarPedidosLoja()">
-          <button type="button" onclick="carregarPedidosLoja()">Atualizar pedidos</button>
-        </section>
 
         <div class="table-wrap">
           <table>
@@ -742,21 +764,22 @@
               <tr>
                 <th>Cliente</th>
                 <th>Pedido</th>
-                <th>Valor</th>
                 <th>Etapa</th>
-                <th>Origem</th>
                 <th>Data</th>
+                <th>Itens</th>
+                <th>Valor</th>
               </tr>
             </thead>
-            <tbody id="pedidosTbody">
+            <tbody id="pedidosItensTbody">
               <tr>
-                <td colspan="6" class="empty">Clique em "Atualizar pedidos" para carregar.</td>
+                <td colspan="6" class="empty">Clique em "Carregar pedidos com itens".</td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
-      <!-- FIM PEDIDOS DA LOJA -->
+      <!-- FIM PEDIDOS COM ITENS (ADITIVO) -->
+      </section>
     </main>
   </section>
 
@@ -1163,16 +1186,12 @@
           senha: res.senha
         }));
 
-        // _ts (nonce) deixa a URL unica a cada acesso: impede o navegador de
-        // reabrir a loja do cache com o cliente anterior. Sempre carrega o
-        // cliente que voce clicou agora.
         const url = LOJA_URL
           + '?adminClienteEmail=' + encodeURIComponent(res.email)
           + '&adminClienteSenha=' + encodeURIComponent(res.senha)
-          + '&adminImpersonar=1'
-          + '&_ts=' + Date.now();
+          + '&adminImpersonar=1';
 
-        window.open(url, '_blank', 'noopener');
+        window.open(url, '_blank');
         fecharModal();
 
       } catch (err) {
@@ -1570,109 +1589,63 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 FIM CHAT PAINEL ZELENO */
 
-  /* ============================================================
-     PEDIDOS DA LOJA (pipeline vendas e recompras + origem Loja)
-     dos clientes do vendedor logado. 100% ADITIVO.
-     ============================================================ */
-  var pedidosLoja = [];
-  var pedidosLojaFiltrados = [];
 
-  function setPedidosStatus(texto) {
-    var el = document.getElementById('pedidosStatus');
-    if (el) el.textContent = texto;
-  }
+    // ===== PEDIDOS COM ITENS (ADITIVO) =====
+    async function carregarPedidosComItens() {
+      var statusEl = document.getElementById('statusPedidosItens');
+      var tbody = document.getElementById('pedidosItensTbody');
+      if (statusEl) statusEl.textContent = 'Carregando...';
+      tbody.innerHTML = '<tr><td colspan="6" class="empty">Carregando pedidos...</td></tr>';
 
-  async function carregarPedidosLoja() {
-    if (!vendedorEmail || !adminSecret) return;
+      try {
+        var res = await apiPost({
+          action: 'getPedidosLojaVendedorComItens',
+          email: vendedorEmail,
+          senha: adminSecret
+        });
 
-    setPedidosStatus('Carregando...');
-    var tbody = document.getElementById('pedidosTbody');
-    if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty">Carregando pedidos...</td></tr>';
+        if (!res || !res.success) {
+          if (statusEl) statusEl.textContent = 'Erro';
+          tbody.innerHTML = '<tr><td colspan="6" class="empty">' + escapeHtml((res && res.message) || 'Não foi possível carregar os pedidos.') + '</td></tr>';
+          return;
+        }
 
-    try {
-      var res = await apiPost({
-        action: 'getPedidosLojaVendedor',
-        email: vendedorEmail,
-        senha: adminSecret
-      });
+        var pedidos = Array.isArray(res.pedidos) ? res.pedidos : [];
 
-      if (!res || !res.success) {
-        setPedidosStatus('Erro');
-        if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty">' + escapeHtml((res && res.message) ? res.message : 'Nao foi possivel carregar os pedidos.') + '</td></tr>';
-        return;
+        if (!pedidos.length) {
+          if (statusEl) statusEl.textContent = '0 pedidos';
+          tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhum pedido encontrado.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = pedidos.map(function (p) {
+          var itens = Array.isArray(p.itens) ? p.itens : [];
+          var itensHtml = itens.length
+            ? itens.map(function (it) {
+                var qtd = Number(it.quantidade) || 0;
+                var nome = escapeHtml(it.nome || 'Item');
+                return '<div>' + (qtd ? qtd + ' \u00d7 ' : '') + nome + '</div>';
+              }).join('')
+            : '<span class="muted">Sem itens</span>';
+
+          return '<tr>'
+            + '<td><div>' + escapeHtml(p.cliente_nome || '-') + '</div><div class="muted">' + escapeHtml(p.cliente_email || '') + '</div></td>'
+            + '<td>' + escapeHtml(p.nome || '-') + '</td>'
+            + '<td><span class="pill">' + escapeHtml(p.etapa || '-') + '</span></td>'
+            + '<td>' + formatarData(p.data) + '</td>'
+            + '<td>' + itensHtml + '</td>'
+            + '<td>' + formatarMoeda(p.valor || 0) + '</td>'
+            + '</tr>';
+        }).join('');
+
+        if (statusEl) statusEl.textContent = pedidos.length + ' pedido(s)';
+
+      } catch (err) {
+        if (statusEl) statusEl.textContent = 'Erro';
+        tbody.innerHTML = '<tr><td colspan="6" class="empty">' + escapeHtml((err && err.message) || String(err)) + '</td></tr>';
       }
-
-      pedidosLoja = Array.isArray(res.pedidos) ? res.pedidos : [];
-      pedidosLojaFiltrados = pedidosLoja.slice();
-
-      var elTotal = document.getElementById('pedidosTotal');
-      var elFat = document.getElementById('pedidosFaturamento');
-      if (elTotal) elTotal.textContent = (res.total != null ? res.total : pedidosLoja.length);
-      if (elFat) elFat.textContent = formatarMoeda(res.faturamento_total || 0);
-
-      renderPedidosLoja(pedidosLojaFiltrados);
-      setPedidosStatus(pedidosLoja.length + ' pedido(s)');
-
-    } catch (err) {
-      setPedidosStatus('Erro');
-      if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty">' + escapeHtml(err && err.message ? err.message : String(err)) + '</td></tr>';
-    }
-  }
-
-  function filtrarPedidosLoja() {
-    var inp = document.getElementById('pedidosBuscaInput');
-    var termo = normalize(inp ? inp.value : '');
-    if (!termo) {
-      pedidosLojaFiltrados = pedidosLoja.slice();
-    } else {
-      pedidosLojaFiltrados = pedidosLoja.filter(function (p) {
-        return normalize(p.cliente_nome).indexOf(termo) >= 0
-          || normalize(p.cliente_email).indexOf(termo) >= 0
-          || normalize(p.nome).indexOf(termo) >= 0
-          || normalize(p.etapa).indexOf(termo) >= 0;
-      });
-    }
-    renderPedidosLoja(pedidosLojaFiltrados);
-  }
-
-  function renderPedidosLoja(lista) {
-    var tbody = document.getElementById('pedidosTbody');
-    if (!tbody) return;
-
-    if (!lista || !lista.length) {
-      tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhum pedido encontrado.</td></tr>';
-      return;
     }
 
-    tbody.innerHTML = lista.map(function (p) {
-      return '<tr>'
-        + '<td><strong>' + escapeHtml(p.cliente_nome || '-') + '</strong><br><span class="muted">' + escapeHtml(p.cliente_email || '') + '</span></td>'
-        + '<td>' + escapeHtml(p.nome || '-') + '</td>'
-        + '<td>' + formatarMoeda(p.valor || 0) + '</td>'
-        + '<td>' + escapeHtml(p.etapa || '-') + '</td>'
-        + '<td>' + escapeHtml(p.origem || '-') + '</td>'
-        + '<td>' + formatarData(p.data) + '</td>'
-        + '</tr>';
-    }).join('');
-  }
-
-  // Auto-carrega os pedidos assim que o vendedor estiver logado.
-  // Cobre tanto o login manual quanto a sessao ja salva. 100% ADITIVO.
-  (function () {
-    var jaPediu = false;
-    var tentativas = 0;
-    var timerAutoPedidos = setInterval(function () {
-      tentativas++;
-      if (!jaPediu && vendedorEmail && adminSecret && document.getElementById('pedidosTbody')) {
-        jaPediu = true;
-        clearInterval(timerAutoPedidos);
-        carregarPedidosLoja();
-      } else if (tentativas > 120) {
-        clearInterval(timerAutoPedidos);
-      }
-    }, 500);
-  })();
-
-</script>
+  </script>
 </body>
 </html>
