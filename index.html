@@ -244,6 +244,8 @@
 
     .table-wrap {
       overflow-x: auto;
+      max-height: 460px;
+      overflow-y: auto;
     }
 
     table {
@@ -746,7 +748,7 @@ FIM CHAT PAINEL ZELENO */
 
       <!-- INICIO PEDIDOS COM ITENS (ADITIVO) -->
       <section class="toolbar">
-        <button type="button" onclick="carregarPedidosComItens()">Carregar pedidos com itens</button>
+        <button type="button" onclick="carregarPedidosComItens()">Atualizar pedidos</button>
       </section>
 
       <section class="table-card">
@@ -772,7 +774,7 @@ FIM CHAT PAINEL ZELENO */
             </thead>
             <tbody id="pedidosItensTbody">
               <tr>
-                <td colspan="6" class="empty">Clique em "Carregar pedidos com itens".</td>
+                <td colspan="6" class="empty">Carregando pedidos...</td>
               </tr>
             </tbody>
           </table>
@@ -854,6 +856,7 @@ FIM CHAT PAINEL ZELENO */
         document.getElementById('adminSecretInput').value = savedSecret;
         mostrarApp();
         carregarCadastros();
+        carregarPedidosComItens();
       }
     });
 
@@ -920,6 +923,7 @@ FIM CHAT PAINEL ZELENO */
 
         mostrarApp();
         carregarCadastros();
+        carregarPedidosComItens();
 
       } catch (err) {
         erro.textContent = err && err.message ? err.message : String(err);
