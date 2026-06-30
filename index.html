@@ -770,11 +770,12 @@ FIM CHAT PAINEL ZELENO */
                 <th>Data</th>
                 <th>Itens</th>
                 <th>Valor</th>
+                <th>Cupom</th>
               </tr>
             </thead>
             <tbody id="pedidosItensTbody">
               <tr>
-                <td colspan="6" class="empty">Carregando pedidos...</td>
+                <td colspan="7" class="empty">Carregando pedidos...</td>
               </tr>
             </tbody>
           </table>
@@ -1599,7 +1600,7 @@ FIM CHAT PAINEL ZELENO */
       var statusEl = document.getElementById('statusPedidosItens');
       var tbody = document.getElementById('pedidosItensTbody');
       if (statusEl) statusEl.textContent = 'Carregando...';
-      tbody.innerHTML = '<tr><td colspan="6" class="empty">Carregando pedidos...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="empty">Carregando pedidos...</td></tr>';
 
       try {
         var res = await apiPost({
@@ -1610,7 +1611,7 @@ FIM CHAT PAINEL ZELENO */
 
         if (!res || !res.success) {
           if (statusEl) statusEl.textContent = 'Erro';
-          tbody.innerHTML = '<tr><td colspan="6" class="empty">' + escapeHtml((res && res.message) || 'Não foi possível carregar os pedidos.') + '</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="7" class="empty">' + escapeHtml((res && res.message) || 'Não foi possível carregar os pedidos.') + '</td></tr>';
           return;
         }
 
@@ -1618,7 +1619,7 @@ FIM CHAT PAINEL ZELENO */
 
         if (!pedidos.length) {
           if (statusEl) statusEl.textContent = '0 pedidos';
-          tbody.innerHTML = '<tr><td colspan="6" class="empty">Nenhum pedido encontrado.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="7" class="empty">Nenhum pedido encontrado.</td></tr>';
           return;
         }
 
@@ -1632,6 +1633,21 @@ FIM CHAT PAINEL ZELENO */
               }).join('')
             : '<span class="muted">Sem itens</span>';
 
+          var cupomHtml;
+          var codCupom = String(p.cupom || p.cupom_codigo || p.cupomAplicado || p.cupom_loja || p.codigo_cupom || '').trim();
+          if (codCupom) {
+            cupomHtml = '<span class="pill">' + escapeHtml(codCupom) + '</span>';
+          } else {
+            var pctDesc = Number(p.desconto_percentual || p.descontoPercentual || 0) || 0;
+            if (!pctDesc && Array.isArray(p.itens)) {
+              p.itens.forEach(function (it) {
+                var d = Number((it && (it.desconto_percentual || it.descontoPercentual || it.percentual)) || 0) || 0;
+                if (d > pctDesc) pctDesc = d;
+              });
+            }
+            cupomHtml = pctDesc > 0 ? '<span class="muted">' + pctDesc + '% off</span>' : '<span class="muted">\u2014</span>';
+          }
+
           return '<tr>'
             + '<td><div>' + escapeHtml(p.cliente_nome || '-') + '</div><div class="muted">' + escapeHtml(p.cliente_email || '') + '</div></td>'
             + '<td>' + escapeHtml(p.nome || '-') + '</td>'
@@ -1639,6 +1655,7 @@ FIM CHAT PAINEL ZELENO */
             + '<td>' + formatarData(p.data) + '</td>'
             + '<td>' + itensHtml + '</td>'
             + '<td>' + formatarMoeda(p.valor || 0) + '</td>'
+            + '<td>' + cupomHtml + '</td>'
             + '</tr>';
         }).join('');
 
@@ -1646,7 +1663,7 @@ FIM CHAT PAINEL ZELENO */
 
       } catch (err) {
         if (statusEl) statusEl.textContent = 'Erro';
-        tbody.innerHTML = '<tr><td colspan="6" class="empty">' + escapeHtml((err && err.message) || String(err)) + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="empty">' + escapeHtml((err && err.message) || String(err)) + '</td></tr>';
       }
     }
 
