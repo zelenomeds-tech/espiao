@@ -1634,6 +1634,15 @@ FIM CHAT PAINEL ZELENO */
 
 
     // ===== PEDIDOS COM ITENS (ADITIVO) =====
+    function linkWhatsAppCarrinho(p) {
+      var tel = String((p && p.cliente_telefone) || '').replace(/\D/g, '');
+      if (!tel) return '';
+      if (tel.length <= 11) tel = '55' + tel;
+      var primeiroNome = String((p && p.cliente_nome) || '').trim().split(' ')[0] || '';
+      var msg = 'Oi ' + primeiroNome + '! Aqui é da Zeleno 🌿 Vi que você começou um pedido com a gente mas não finalizou. Posso te ajudar a concluir? Qualquer dúvida sobre produto, receita ou pagamento, estou por aqui pra facilitar.';
+      return 'https://wa.me/' + tel + '?text=' + encodeURIComponent(msg);
+    }
+
     async function carregarCarrinhosAbandonados() {
       var statusEl = document.getElementById('statusCarrinhos');
       var tbody = document.getElementById('carrinhosTbody');
@@ -1679,8 +1688,13 @@ FIM CHAT PAINEL ZELENO */
             cupomHtml = '<span class="muted">\u2014</span>';
           }
 
+          var wpp = linkWhatsAppCarrinho(p);
+          var btnWpp = wpp
+            ? '<a href="' + wpp + '" target="_blank" rel="noopener" style="display:inline-block;margin-top:6px;padding:5px 12px;border-radius:8px;background:#25D366;color:#fff;font-size:12px;font-weight:600;text-decoration:none;">Chamar no WhatsApp</a>'
+            : '<span class="muted" style="font-size:11px;">sem telefone</span>';
+
           return '<tr>'
-            + '<td><div>' + escapeHtml(p.cliente_nome || '-') + '</div><div class="muted">' + escapeHtml(p.cliente_email || '') + '</div></td>'
+            + '<td><div>' + escapeHtml(p.cliente_nome || '-') + '</div><div class="muted">' + escapeHtml(p.cliente_email || '') + '</div><div>' + btnWpp + '</div></td>'
             + '<td>' + escapeHtml(p.nome || '-') + '</td>'
             + '<td><span class="pill">' + escapeHtml(p.etapa || '-') + '</span></td>'
             + '<td>' + formatarData(p.data) + '</td>'
