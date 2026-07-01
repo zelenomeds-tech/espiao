@@ -1777,7 +1777,7 @@ FIM CHAT PAINEL ZELENO */
             cupomHtml = pctDesc > 0 ? '<span class="muted">' + pctDesc + '% off</span>' : '<span class="muted">\u2014</span>';
           }
 
-          var endHtml = p.endereco ? '<div class="muted" style="margin-top:4px;">\U0001F4CD ' + escapeHtml(p.endereco) + '</div>' : '';
+          var endHtml = p.endereco ? '<div class="muted" style="margin-top:4px;">📍 ' + escapeHtml(p.endereco) + '</div>' : '';
 
           return '<tr>'
             + '<td><div>' + escapeHtml(p.cliente_nome || '-') + '</div><div class="muted">' + escapeHtml(p.cliente_email || '') + '</div></td>'
