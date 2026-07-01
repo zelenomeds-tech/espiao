@@ -807,11 +807,12 @@ FIM CHAT PAINEL ZELENO */
                 <th>Itens</th>
                 <th>Valor</th>
                 <th>Cupom</th>
+                <th>Ação</th>
               </tr>
             </thead>
             <tbody id="carrinhosTbody">
               <tr>
-                <td colspan="7" class="empty">Carregando carrinhos...</td>
+                <td colspan="8" class="empty">Carregando carrinhos...</td>
               </tr>
             </tbody>
           </table>
@@ -1639,7 +1640,23 @@ FIM CHAT PAINEL ZELENO */
       if (!tel) return '';
       if (tel.length <= 11) tel = '55' + tel;
       var primeiroNome = String((p && p.cliente_nome) || '').trim().split(' ')[0] || '';
-      var msg = 'Oi ' + primeiroNome + '! Aqui é da Zeleno 🌿 Vi que você começou um pedido com a gente mas não finalizou. Posso te ajudar a concluir? Qualquer dúvida sobre produto, receita ou pagamento, estou por aqui pra facilitar.';
+      var itens = Array.isArray(p && p.itens) ? p.itens : [];
+      var nomesItens = itens
+        .map(function (it) {
+          var qtd = Number(it && it.quantidade) || 0;
+          var nome = String((it && it.nome) || '').trim();
+          if (!nome || /frete/i.test(nome)) return '';
+          return (qtd ? qtd + 'x ' : '') + nome;
+        })
+        .filter(Boolean);
+      var listaItens = nomesItens.length ? nomesItens.join(', ') : '';
+      var msg = 'Oi ' + primeiroNome + '! Aqui é da Zeleno 🌿 ';
+      if (listaItens) {
+        msg += 'Vi que você deixou no carrinho: ' + listaItens + '. ';
+      } else {
+        msg += 'Vi que você começou um pedido com a gente mas não finalizou. ';
+      }
+      msg += 'Posso te ajudar a finalizar? Qualquer dúvida sobre produto, receita ou pagamento, é só me chamar. 😉';
       return 'https://wa.me/' + tel + '?text=' + encodeURIComponent(msg);
     }
 
@@ -1647,7 +1664,7 @@ FIM CHAT PAINEL ZELENO */
       var statusEl = document.getElementById('statusCarrinhos');
       var tbody = document.getElementById('carrinhosTbody');
       if (statusEl) statusEl.textContent = 'Carregando...';
-      tbody.innerHTML = '<tr><td colspan="7" class="empty">Carregando carrinhos...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" class="empty">Carregando carrinhos...</td></tr>';
 
       try {
         var res = await apiPost({
@@ -1658,7 +1675,7 @@ FIM CHAT PAINEL ZELENO */
 
         if (!res || !res.success) {
           if (statusEl) statusEl.textContent = 'Erro';
-          tbody.innerHTML = '<tr><td colspan="7" class="empty">' + escapeHtml((res && res.message) || 'Não foi possível carregar os carrinhos.') + '</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="8" class="empty">' + escapeHtml((res && res.message) || 'Não foi possível carregar os carrinhos.') + '</td></tr>';
           return;
         }
 
@@ -1666,7 +1683,7 @@ FIM CHAT PAINEL ZELENO */
 
         if (!pedidos.length) {
           if (statusEl) statusEl.textContent = '0 carrinhos';
-          tbody.innerHTML = '<tr><td colspan="7" class="empty">Nenhum carrinho abandonado encontrado.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="8" class="empty">Nenhum carrinho abandonado encontrado.</td></tr>';
           return;
         }
 
@@ -1680,27 +1697,23 @@ FIM CHAT PAINEL ZELENO */
               }).join('')
             : '<span class="muted">Sem itens</span>';
 
-          var cupomHtml;
-          var codCupom = String(p.cupom || p.cupom_codigo || p.cupomAplicado || p.cupom_loja || p.codigo_cupom || '').trim();
-          if (codCupom) {
-            cupomHtml = '<span class="pill">' + escapeHtml(codCupom) + '</span>';
-          } else {
-            cupomHtml = '<span class="muted">\u2014</span>';
-          }
+          var codCupom = String(p.cupom || p.cupom_codigo || p.cupomAplicado || '').trim();
+          var cupomHtml = codCupom ? '<span class="pill">' + escapeHtml(codCupom) + '</span>' : '<span class="muted">\u2014</span>';
 
           var wpp = linkWhatsAppCarrinho(p);
-          var btnWpp = wpp
-            ? '<a href="' + wpp + '" target="_blank" rel="noopener" style="display:inline-block;margin-top:6px;padding:5px 12px;border-radius:8px;background:#25D366;color:#fff;font-size:12px;font-weight:600;text-decoration:none;">Chamar no WhatsApp</a>'
+          var acaoHtml = wpp
+            ? '<a href="' + wpp + '" target="_blank" rel="noopener" style="display:inline-block;padding:6px 12px;border-radius:8px;background:#25D366;color:#fff;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap;">Chamar no WhatsApp</a>'
             : '<span class="muted" style="font-size:11px;">sem telefone</span>';
 
           return '<tr>'
-            + '<td><div>' + escapeHtml(p.cliente_nome || '-') + '</div><div class="muted">' + escapeHtml(p.cliente_email || '') + '</div><div>' + btnWpp + '</div></td>'
+            + '<td><div>' + escapeHtml(p.cliente_nome || '-') + '</div><div class="muted">' + escapeHtml(p.cliente_email || '') + '</div></td>'
             + '<td>' + escapeHtml(p.nome || '-') + '</td>'
             + '<td><span class="pill">' + escapeHtml(p.etapa || '-') + '</span></td>'
             + '<td>' + formatarData(p.data) + '</td>'
             + '<td>' + itensHtml + '</td>'
             + '<td>' + formatarMoeda(p.valor || 0) + '</td>'
             + '<td>' + cupomHtml + '</td>'
+            + '<td>' + acaoHtml + '</td>'
             + '</tr>';
         }).join('');
 
@@ -1708,7 +1721,7 @@ FIM CHAT PAINEL ZELENO */
 
       } catch (err) {
         if (statusEl) statusEl.textContent = 'Erro';
-        tbody.innerHTML = '<tr><td colspan="7" class="empty">' + escapeHtml((err && err.message) || String(err)) + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="empty">' + escapeHtml((err && err.message) || String(err)) + '</td></tr>';
       }
     }
 
