@@ -1636,9 +1636,6 @@ FIM CHAT PAINEL ZELENO */
 
     // ===== PEDIDOS COM ITENS (ADITIVO) =====
     function linkWhatsAppCarrinho(p) {
-      var tel = String((p && p.cliente_telefone) || '').replace(/\D/g, '');
-      if (!tel) return '';
-      if (tel.length <= 11) tel = '55' + tel;
       var primeiroNome = String((p && p.cliente_nome) || '').trim().split(' ')[0] || '';
       var itens = Array.isArray(p && p.itens) ? p.itens : [];
       var nomesItens = itens
@@ -1657,6 +1654,19 @@ FIM CHAT PAINEL ZELENO */
         msg += 'Vi que você começou um pedido com a gente mas não finalizou. ';
       }
       msg += 'Posso te ajudar a finalizar? Qualquer dúvida sobre produto, receita ou pagamento, é só me chamar. 😉';
+
+      // Prioridade 1: link da conversa ja existente (propriedade HubSpot link_conversa_respondido).
+      // So entra na mensagem de recuperacao ja pronta -- nao troca o numero, so abre a conversa certa.
+      var linkConversa = String((p && p.cliente_link_conversa) || '').trim();
+      if (linkConversa) {
+        var separador = linkConversa.indexOf('?') >= 0 ? '&' : '?';
+        return linkConversa + separador + 'text=' + encodeURIComponent(msg);
+      }
+
+      // Fallback: sem link de conversa registrado, monta wa.me pelo telefone.
+      var tel = String((p && p.cliente_telefone) || '').replace(/\D/g, '');
+      if (!tel) return '';
+      if (tel.length <= 11) tel = '55' + tel;
       return 'https://wa.me/' + tel + '?text=' + encodeURIComponent(msg);
     }
 
